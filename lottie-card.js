@@ -1,4 +1,3 @@
-
 class LottieCard extends HTMLElement {
     setConfig(config) {
         if (!config.animation) {
@@ -52,15 +51,39 @@ class LottieCard extends HTMLElement {
     loadLottieLibrary() {
         return new Promise((resolve, reject) => {
             if (window.lottie) {
+                console.log('Lottie library already loaded');
                 resolve(window.lottie);
                 return;
             }
 
             const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.1/lottie.min.js';
-            script.onload = () => resolve(window.lottie);
-            script.onerror = () => reject(new Error('Lottie-Web library could not be loaded.'));
-            document.head.appendChild(script);
+
+            // Prüfen, ob die lokale Datei existiert
+            fetch('/local/js/lottie.min.js', { method: 'HEAD' })
+                .then((response) => {
+                    if (response.ok) {
+                        console.log('Lottie library found locally, loading...');
+                        script.src = '/local/js/lottie.min.js';
+                    } else {
+                        console.log('Lottie library not found locally, downloading from GitHub...');
+                        script.src = 'https://raw.githubusercontent.com/fastender/Lottie-Card/main/js/lottie.min.js';
+                    }
+
+                    script.onload = () => {
+                        console.log('Lottie library loaded successfully');
+                        resolve(window.lottie);
+                    };
+                    script.onerror = () => {
+                        console.error('Failed to load Lottie library');
+                        reject(new Error('Lottie library could not be loaded.'));
+                    };
+
+                    document.head.appendChild(script);
+                })
+                .catch((error) => {
+                    console.error('Error checking local Lottie library:', error);
+                    reject(error);
+                });
         });
     }
 
@@ -91,4 +114,4 @@ class LottieCard extends HTMLElement {
     }
 }
 
-customElements.define('lottie-card', LottieCard);
+customElements.define('lottie-card-1', LottieCard);
