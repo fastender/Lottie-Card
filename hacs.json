@@ -1,6 +1,7 @@
 
 {
-  "name": "LottieCard",
-  "content_in_root": false,
-  "render_readme": true
+    "name": "LottieCard",
+    "render_readme": true,
+    "filename": "lottie-card.js",
+    "content_in_root": false
 }
