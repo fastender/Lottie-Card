@@ -2,6 +2,9 @@
 
 **Lottie Card** is a custom Lovelace card for Home Assistant that allows you to display **Lottie animations** in your dashboards. Bring your Home Assistant interface to life with dynamic and interactive animations!
 
+![Live Preview](./docs/example-1.png)
+
+
 ---
 
 ## Features
@@ -75,6 +78,14 @@ loop: true
 autoplay: true
 direction: -1
 ```
+
+---
+
+## Live Preview
+
+Below is a demonstration of the Lottie Card in action:
+
+![Live Preview](./docs/live-preview.gif)
 
 ---
 
