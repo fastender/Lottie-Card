@@ -1,3 +1,4 @@
+
 class LottieCard extends HTMLElement {
     setConfig(config) {
         if (!config.animation) {
@@ -7,83 +8,87 @@ class LottieCard extends HTMLElement {
         this.config = config;
 
         // Standardwerte für Hintergrundfarbe und andere Parameter
-        const backgroundColor = config.background_color || 'transparent'; // Standard: transparent
+        const backgroundColor = config.background_color || 'transparent';
 
         // Erstelle das Haupt-Card-Element
         const card = document.createElement('ha-card');
-        card.style.display = 'flex';
-        card.style.alignItems = 'center';
-        card.style.justifyContent = 'center';
-        card.style.backgroundColor = backgroundColor; // Hintergrundfarbe aus Konfiguration
-        card.style.boxShadow = 'none'; // Optional: Schatten entfernen
+        card.style.position = 'relative';
+        card.style.overflow = 'hidden';
+        card.style.backgroundColor = backgroundColor;
 
-        // Erstelle den Container für die Animation
-        const container = document.createElement('div');
-        container.style.width = config.size || '100px';
-        container.style.height = config.size || '100px';
-        container.style.backgroundColor = 'transparent'; // Container bleibt transparent
-        container.style.overflow = 'hidden';
+        // Lottie-Container erstellen
+        const lottieContainer = document.createElement('div');
+        lottieContainer.style.position = 'absolute';
+        lottieContainer.style.top = '0';
+        lottieContainer.style.left = '0';
+        lottieContainer.style.width = '100%';
+        lottieContainer.style.height = '100%';
+        lottieContainer.style.zIndex = '-1';
+        card.appendChild(lottieContainer);
 
-        card.appendChild(container);
-        this.appendChild(card);
-
-        // Animation laden
-        this.loadAnimation(container, config);
-    }
-
-    loadAnimation(container, config) {
-        if (this.animationInstance) {
-            this.animationInstance.destroy(); // Vorherige Instanz entfernen
-        }
-
-        const loop = config.loop !== undefined ? config.loop : false;
-        const autoplay = config.autoplay !== undefined ? config.autoplay : true;
-        const direction = config.direction !== undefined ? config.direction : 1;
-
-        this.animationInstance = lottie.loadAnimation({
-            container: container,
-            renderer: 'svg',
-            loop: direction === 1 ? loop : false,
-            autoplay: false, // Autoplay wird manuell gesteuert
-            path: config.animation
-        });
-
-        this.animationInstance.addEventListener('DOMLoaded', () => {
-            this.animationInstance.setDirection(direction);
-
-            if (direction === -1) {
-                this.animationInstance.goToAndStop(this.animationInstance.totalFrames - 1, true);
-            }
-
-            if (autoplay) {
-                this.animationInstance.play();
-            }
-        });
-
-        if (!loop || direction === -1) {
-            this.animationInstance.addEventListener('complete', () => {
-                if (direction === 1) {
-                    this.animationInstance.goToAndStop(this.animationInstance.totalFrames - 1, true);
-                } else if (direction === -1) {
-                    this.animationInstance.goToAndStop(0, true);
-                }
+        // Lottie-Animation laden
+        this.loadLottieLibrary().then((Lottie) => {
+            Lottie.loadAnimation({
+                container: lottieContainer,
+                renderer: 'svg',
+                loop: config.loop !== false, // Standard: true
+                autoplay: config.autoplay !== false, // Standard: true
+                path: config.animation,
             });
-        }
+        }).catch((error) => {
+            console.error('Lottie Animation konnte nicht geladen werden:', error);
+        });
+
+        // Card-Inhalt erstellen
+        const content = document.createElement('div');
+        content.style.position = 'relative';
+        content.style.zIndex = '1';
+        card.appendChild(content);
+
+        this.content = content;
+        this.card = card;
     }
 
-    reloadAnimation() {
-        // Animation erneut laden
-        this.loadAnimation(this.querySelector('div'), this.config);
+    loadLottieLibrary() {
+        return new Promise((resolve, reject) => {
+            if (window.lottie) {
+                resolve(window.lottie);
+                return;
+            }
+
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.1/lottie.min.js';
+            script.onload = () => resolve(window.lottie);
+            script.onerror = () => reject(new Error('Lottie-Web library could not be loaded.'));
+            document.head.appendChild(script);
+        });
     }
 
     set hass(hass) {
-        // Optional: Verarbeite Home Assistant Status
+        if (!this.content) {
+            return;
+        }
+
+        // Home Assistant-Daten verarbeiten (z.B. Entity-Daten anzeigen)
+        this.content.innerHTML = `<div>${this.config.title || ''}</div>`;
     }
 
     getCardSize() {
-        return 1;
+        return 3;
+    }
+
+    connectedCallback() {
+        if (!this.card) {
+            return;
+        }
+        this.appendChild(this.card);
+    }
+
+    disconnectedCallback() {
+        if (this.card && this.card.parentElement) {
+            this.card.parentElement.removeChild(this.card);
+        }
     }
 }
 
-// Registriere die neue Karte mit der Bezeichnung 'custom-background-animation-card'
-customElements.define('custom-background-animation-card', LottieCard);
+customElements.define('lottie-card', LottieCard);
