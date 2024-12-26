@@ -95,4 +95,4 @@ This project is licensed under the [GNU General Public License](./LICENSE).
 ---
 
 ## Feedback & Support
-If you have questions or want to report an issue, please open an [issue on GitHub](https://github.com/<your-username>/lottie-card/issues).
+If you have questions or want to report an issue, please open an [issue on GitHub](https://github.com/fastender/lottie-card/issues).
