@@ -14,4 +14,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Validate
-        uses: hacs/action@v1
+        uses: hacs/action@main
