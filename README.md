@@ -1,13 +1,13 @@
+# Lottie Card for Home Assistant
 
-# LottieCard for Home Assistant
-
-**LottieCard** is a custom Lovelace card for Home Assistant that allows you to display **Lottie animations** in your dashboards. Bring your Home Assistant interface to life with dynamic and interactive animations!
+**Lottie Card** is a custom Lovelace card for Home Assistant that allows you to display **Lottie animations** in your dashboards. Bring your Home Assistant interface to life with dynamic and interactive animations!
 
 ---
 
 ## Features
 - Supports rendering Lottie animations.
 - Customizable background colors.
+- Adjustable animation size (e.g., `size: 150px`).
 - Additional options for animation control:
   - **`loop`**: Repeat the animation.
   - **`autoplay`**: Automatically start the animation.
@@ -45,6 +45,7 @@ Add the card to your Lovelace dashboard. Here's an example:
 type: custom:lottie-card
 animation: /local/animations/example.json
 background_color: "#ffffff"
+size: 150px
 loop: true
 autoplay: true
 direction: 1
@@ -55,6 +56,7 @@ direction: 1
 |--------------------|-------------------------------------------|-------------------|
 | `animation`        | Path to the Lottie animation file         | **Required**      |
 | `background_color` | Background color of the card (hex)        | `transparent`     |
+| `size`             | Size of the animation (e.g., `150px`)     | `100%`            |
 | `loop`             | Enable/disable looping of the animation   | `false`           |
 | `autoplay`         | Automatically start the animation         | `false`           |
 | `direction`        | Direction of the animation (1 or -1)      | `1`               |
@@ -68,6 +70,7 @@ Here’s a sample configuration:
 type: custom:lottie-card
 animation: /local/animations/loader.json
 background_color: "#f0f0f0"
+size: 200px
 loop: true
 autoplay: true
 direction: -1
