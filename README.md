@@ -25,7 +25,9 @@
 1. Open HACS in your Home Assistant instance.
 2. Navigate to **Frontend** > **Custom Repositories**.
 3. Add this repository: `https://github.com/fastender/lottie-card`.
-4. Install **LottieCard** from the available frontend integrations.
+4. Select "Lovelace" or "Dashboard" as category
+5. Click "Install"
+
 
 ### Manual Installation
 1. Download the `lottie-card.js` file from this repository.
