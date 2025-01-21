@@ -1,7 +1,7 @@
-
 {
-    "name": "LottieCard",
-    "render_readme": true,
+    "name": "Lottie Card",
+    "content_in_root": false,
     "filename": "lottie-card.js",
-    "content_in_root": true
+    "render_readme": true,
+    "homeassistant": "2023.0.0"
 }
